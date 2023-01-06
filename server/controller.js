@@ -24,6 +24,13 @@ module.exports = {
                 name varchar
             );
 
+            CREATE TABLE cities (
+              city_id SERIAL PRIMARY KEY,
+              name VARCHAR(255),
+              rating INT,
+              country_id INT NOT NULL REFERENCES countries(country_id)
+              );
+
             insert into countries (name)
             values ('Afghanistan'),
             ('Albania'),
@@ -221,12 +228,7 @@ module.exports = {
             ('Zambia'),
             ('Zimbabwe');
 
-            CREATE TABLE cities (
-              city_id SERIAL PRIMARY KEY,
-              name VARCHAR(255),
-              rating INT,
-              country_id INT NOT NULL REFERENCES countries(country_id)
-              );
+           
         `
       )
       .then(() => {
@@ -258,7 +260,7 @@ module.exports = {
     sequelize
       .query(
         `
-        SELECT * FROM countries JOIN cities ON cities.country_id = countries.country_id
+        SELECT c.name AS country, ci.name AS city, ci.rating FROM cities ci JOIN countries c ON ci.country_id = c.country_id
         `
       )
       .then((dbRes) => {
