@@ -260,12 +260,14 @@ module.exports = {
     sequelize
       .query(
         `
-        SELECT c.name AS country, ci.name AS city, ci.rating FROM cities ci JOIN countries c ON ci.country_id = c.country_id
+        SELECT c.name AS country, ci.name AS city, ci.rating, ci.city_id FROM cities ci JOIN countries c ON ci.country_id = c.country_id
         `
       )
-      .then((dbRes) => {
-        res.status(200).send(dbRes[0]);
-        console.log(dbRes[0]);
-      });
+      .then((dbRes) => res.status(200).send(dbRes[0]));
+  },
+  deleteCity: (req, res) => {
+    sequelize
+      .query(`DELETE FROM cities WHERE city_id = ${req.params.id}`)
+      .then((dbRes) => res.status(200).send(dbRes[0]));
   },
 };
